@@ -13,7 +13,22 @@ function Users(props) {
 			.catch(error => {
 				console.log(error)
 			})
-	}, [])
+    }, [])
+    
+    const handleDelete = (event, id) => {
+        event.preventDefault()
+        // optimistic update
+        setUsers(users.filter(user => user.id !== id))
+
+        api()
+            .delete(`/users/${id}`)
+            .then(res => {
+                console.log(`User was deleted`) 
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
 	return (
 		<>
@@ -22,6 +37,8 @@ function Users(props) {
             {users.map(user => (
                 <div key={user.id} className='account'>
                     <Link to={`/users/${user.id}`} className='account-update'>Edit</Link>
+                    <div className='account-delete' onClick={(event) => handleDelete(event, user.id)}>Delete</div>
+
                     <div className="account-row">Name: {user.name}</div>
 			        <div className="account-row">Email: {user.email}</div>
                 </div>
