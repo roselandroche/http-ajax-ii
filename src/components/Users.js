@@ -20,6 +20,12 @@ function Users(props) {
         // optimistic update
         setUsers(users.filter(user => user.id !== id))
 
+        // save deleted user in variable
+        const ghost = users.find(user => user.id === id)
+
+        //make sure user wants to delete
+        window.confirm('Are you sure?')
+
         api()
             .delete(`/users/${id}`)
             .then(res => {
@@ -27,6 +33,8 @@ function Users(props) {
             })
             .catch(err => {
                 console.log(err)
+                //add deleted user back in 
+                setUsers([ ...users, ghost ])
             })
     }
 
