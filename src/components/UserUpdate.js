@@ -19,9 +19,47 @@ function UserUpdate(props) {
             })
     }, [props.match.params.id])
 
+    const handleChange = event => {
+        setUser({
+            ...user,
+            [event.target.name]: event.target.value
+        })
+    }
+
+    const handleSubmit = event => {
+        event.preventDefault()
+       
+        api()
+            .put(`/users/${user.id}`, user)
+            .then(res => {
+                props.history.push('/users')
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     return (
         <div>
             <h1>Update User</h1>
+
+            <form onSubmit={handleSubmit}>
+                <input 
+                    type='text'
+                    name='name'
+                    placeholder='Name'
+                    value={user.name}
+                    onChange={handleChange}
+                    />
+                <input 
+                    type='email'
+                    name='email'
+                    placeholder='Email'
+                    value={user.email}
+                    onChange={handleChange}
+                    />
+                <button type='submit'>Save</button>
+            </form>
         </div>
     )
 }
